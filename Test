@@ -170,6 +170,22 @@ class Test {
 
 			obj = img;
 		}
+		
+		public void changeXSpeed(int dx){
+			this.dx = dx;
+		}
+		
+		public void changeYSpeed(int dy){
+			this.dy = dy;
+		}
+		
+		public void changeX(int x){
+			this.x = x;
+		}
+		
+		public void changeY(int y){
+			this.y = y;
+		}
 	}
 	
 	private class Bubble extends Actor {
@@ -220,10 +236,13 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
+			
+			Image sprite = new Image(896, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Sprite.jpg");
 		
 			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Background.jpg"));
 			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
 			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
+			actors.add(sprite);
 		
 			while (window.isOpen( )) {
 				// Clear the screen
@@ -238,14 +257,21 @@ class Test {
 
 				// Update the display with any changes
 				window.display( );
-
-				// Handle any events
-				for (Event event : window.pollEvents( )) {
-					if (event.type == Event.Type.CLOSED) {
-						// the user pressed the close button
-						window.close( );
+				
+				// Handle any event
+				while(true){
+					for (Event event : window.pollEvents( )) {
+						if (event.type == Event.Type.CLOSED) {
+							// the user pressed the close button
+							window.close( );
+						}
+						if (event.type == Event.Type.MOUSE_MOVED){
+							Vector2i pos = Mouse.getPosition();
+							System.out.println("The user pressed the following key: " + pos.x);
+						}
 					}
 				}
+				
 			}
 		}
 	}
@@ -300,67 +326,11 @@ class Test {
 	}
 	
 	public void run ( ) {
-
-		//
-		// Check whether we're running from a JDK or JRE install
-		// ...and set FontPath appropriately.
-		//
 		if ((new File(JreFontPath)).exists( )) FontPath = JreFontPath;
 		else FontPath = JdkFontPath;
 		
 		StartMenu test = new StartMenu();
 		test.run();
-
-		//
-		// Create a window
-		//
-		/*
-		RenderWindow window = new RenderWindow( );
-		window.create(new VideoMode(screenWidth, screenHeight),
-				Title,
-				WindowStyle.DEFAULT);
-
-		window.setFramerateLimit(30); // Avoid excessive updates
-
-		//
-		// Create some actors
-		//
-		actors.add(new Image(300, 300,0,0,
-					0, "//lancs/homes/32/dugganj/My Documents/210/Test/yo.jpg"));
-		actors.add(new Message(screenWidth / 2, screenHeight / 2,
-					10, Message, Color.BLACK));
-		actors.add(new Bubble(500, 500, 20, Color.MAGENTA, 128));
-		actors.add(new Bubble(600, 600, 20, Color.YELLOW,  128));
-		actors.add(new Bubble(500, 600, 20, Color.BLUE,    128));
-		actors.add(new Bubble(600, 500, 20, Color.BLACK,   128));
-
-		//
-		// Main loop
-		//
-		while (window.isOpen( )) {
-			// Clear the screen
-			window.clear(Color.WHITE);
-
-			// Move all the actors around
-			for (Actor actor : actors) {
-				actor.calcMove(0, 0, screenWidth, screenHeight);
-				actor.performMove( );
-				actor.draw(window);
-			}
-
-			// Update the display with any changes
-			window.display( );
-
-			// Handle any events
-			for (Event event : window.pollEvents( )) {
-				if (event.type == Event.Type.CLOSED) {
-					// the user pressed the close button
-					window.close( );
-				}
-			}
-		}
-		
-		*/
 	}
 
 	public static void main (String args[ ]) {
