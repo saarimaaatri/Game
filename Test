@@ -145,7 +145,7 @@ class Test {
 		}
 	}
 
-	private class Image extends Actor {
+	private class Image extends Actor{
 		public Image(int x, int y, int r,int dx,int dy,String textureFile) {
 			//
 			// Load image/ texture
@@ -171,7 +171,7 @@ class Test {
 			obj = img;
 		}
 	}
-
+	
 	private class Bubble extends Actor {
 		private int radius;
 
@@ -213,15 +213,6 @@ class Test {
 	}
 	
 	public class Game{
-		int gameWidth;
-		int gameHieght;
-		
-		public Game(int gameWidth,int gameHieght){
-			// a bit pointless
-			this.gameWidth = gameWidth;
-			this.gameHieght = gameHieght;
-		}
-		
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -230,9 +221,9 @@ class Test {
 
 			window.setFramerateLimit(30);
 		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Background.jpg"));
-			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Border.jpg"));
-			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Border.jpg"));
+			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Background.jpg"));
+			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
+			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
 		
 			while (window.isOpen( )) {
 				// Clear the screen
@@ -264,6 +255,8 @@ class Test {
 			
 		}
 		
+		Game gameBoard = new Game();
+		
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -271,10 +264,11 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
-		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Background.jpg"));
-			actors.add(new Image(512, 158,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/StartButton.jpg"));
-		
+			
+			Image startButton = new Image(512, 158,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/StartButton.jpg");
+			
+			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Background.jpg"));
+			actors.add(startButton);
 		
 			while (window.isOpen( )) {
 				// Clear the screen
@@ -295,6 +289,10 @@ class Test {
 					if (event.type == Event.Type.CLOSED) {
 						// the user pressed the close button
 						window.close( );
+					}
+					if (event.type == Event.Type.KEY_PRESSED){
+						window.close();
+						gameBoard.run();
 					}
 				}
 			}
