@@ -237,11 +237,11 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image sprite = new Image(896, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Sprite.jpg");
+			Image sprite = new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Sprite.jpg");
 		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Background.jpg"));
-			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
-			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Border.jpg"));
+			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Background.jpg"));
+			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Border.jpg"));
+			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Border.jpg"));
 			actors.add(sprite);
 		
 			while (window.isOpen( )) {
@@ -265,9 +265,21 @@ class Test {
 							// the user pressed the close button
 							window.close( );
 						}
-						if (event.type == Event.Type.MOUSE_MOVED){
-							Vector2i pos = Mouse.getPosition();
-							System.out.println("The user pressed the following key: " + pos.x);
+						if (event.type == Event.Type.KEY_PRESSED){
+							KeyEvent keyboard = event.asKeyEvent();
+							System.out.println(keyboard.key);
+							
+							if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
+								sprite.changeY(5);
+								System.out.println("True");
+							}else if(keyboard.key.equals("D") == true){
+								sprite.changeX(5);
+							}else if(keyboard.key.equals("A") == true){
+								sprite.changeX(-5);
+							}else if(keyboard.key.equals("S") == true){
+								sprite.changeX(-5);
+							}
+	//						System.out.println("The user pressed the following key: " + pos.x);
 						}
 					}
 				}
@@ -348,4 +360,4 @@ class Test {
 		Test t = new Test( );
 		t.run( );
 	}
-}	
+}
