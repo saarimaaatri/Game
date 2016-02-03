@@ -291,10 +291,17 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image startButton = new Image(512, 158,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/StartButton.jpg");
+			Image logo = new Image(512,150,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Logo.jpg");
 			
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/32/dugganj/My Documents/210/Test/Background.jpg"));
+			Image startButton = new Image(512, 388,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
+			Image optionsButton = new Image(512, 518,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
+			Image leaderboardButton = new Image(512, 648,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
+			
+			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Background.jpg"));
 			actors.add(startButton);
+			actors.add(optionsButton);
+			actors.add(leaderboardButton);
+			actors.add(logo);
 		
 			while (window.isOpen( )) {
 				// Clear the screen
@@ -316,9 +323,13 @@ class Test {
 						// the user pressed the close button
 						window.close( );
 					}
-					if (event.type == Event.Type.KEY_PRESSED){
-						window.close();
-						gameBoard.run();
+					if (event.type == Event.Type.MOUSE_BUTTON_PRESSED){
+						Vector2i pos = Mouse.getPosition();
+//						System.out.println("The user pressed the following key: " + pos.y);
+						if (pos.x > 750 && pos.x < 1200 && pos.y > 520 && pos.y < 630) {
+							window.close();
+							gameBoard.run();
+						}
 					}
 				}
 			}
