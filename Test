@@ -146,6 +146,15 @@ class Test {
 	}
 
 	private class Image extends Actor{
+		int countX = 0;
+		int countY = 0;
+		
+		int checkY = 1;
+		int checkX = 1;
+		
+		int neX = 0;
+		int neY = 0;
+		
 		public Image(int x, int y, int r,int dx,int dy,String textureFile) {
 			//
 			// Load image/ texture
@@ -170,29 +179,71 @@ class Test {
 
 			obj = img;
 		}
-		
-		public void changeXSpeed(int dx){
-			this.dx = dx;
-		}
-		
-		public void changeYSpeed(int dy){
-			this.dy = dy;
-		}
-		
+
 		public void changeX(int x){
-			this.x = x;
+			if(x > 0 && checkX == -1){
+				countX = 0;
+			}else if(x < 0 && checkX == 1){
+				countX = 0;
+			}
+			
+			if(x > 0){
+				checkX = 1;
+			}else{
+				checkX = -1;
+			}
+			if(countX < 15){
+				countX++;
+			}
+			this.x = (x * countX) + this.x;			
 		}
 		
 		public void changeY(int y){
-			this.y = y;
+			if(y > 0 && checkY == -1){
+				countY = 0;
+			}else if(y < 0 && checkY == 1){
+				countY = 0;
+			}
+			
+			if(y > 0){
+				checkY = 1;
+			}else{
+				checkY = -1;
+			}
+			if(countY < 15){
+				countY++;
+			}
+			this.y = (y * countY) + this.y;		
 		}
+		
+		//code for mouse
+		/*public void calMove(int mouseX,int mouseY){
+			neX = mouseX - this.x;
+			neY = mouseY - this.y;
+			
+		
+			if(neX > 0){
+				this.changeX(1);
+			}
+			if(neX < 0){
+				this.changeX(-1);
+			}
+			if(neY > 0){
+				this.changeY(1);
+			}
+			if(neY < 0){
+				this.changeY(-1);
+			}
+			
+			
+		}*/
 	}
 	
 	private class Bubble extends Actor {
 		private int radius;
 
 		public Bubble(int x, int y, int dx, int dy, int radius, Color c,
-				int transparency) {
+			int transparency) {
 			CircleShape circle = new CircleShape(radius);
 			circle.setFillColor(new Color(c, transparency));
 			circle.setOrigin(radius, radius);
@@ -236,13 +287,15 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
+			Image sprite = new Image(545, 384,0,0,0, "H:/My Documents/210/Test/Sprite.jpg");
 			
-			Image sprite = new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Sprite.jpg");
-		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Background.jpg"));
-			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Border.jpg"));
-			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Border.jpg"));
+			
+			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
 			actors.add(sprite);
+			actors.add(new Image(128, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg"));
+			actors.add(new Image(896, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg"));
+			
+			
 		
 			while (window.isOpen( )) {
 				// Clear the screen
@@ -260,6 +313,7 @@ class Test {
 				
 				// Handle any event
 				while(true){
+					//keyboard working code
 					for (Event event : window.pollEvents( )) {
 						if (event.type == Event.Type.CLOSED) {
 							// the user pressed the close button
@@ -268,20 +322,28 @@ class Test {
 						if (event.type == Event.Type.KEY_PRESSED){
 							KeyEvent keyboard = event.asKeyEvent();
 							System.out.println(keyboard.key);
-							
 							if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
-								sprite.changeY(5);
-								System.out.println("True");
-							}else if(keyboard.key.equals("D") == true){
-								sprite.changeX(5);
-							}else if(keyboard.key.equals("A") == true){
-								sprite.changeX(-5);
-							}else if(keyboard.key.equals("S") == true){
-								sprite.changeX(-5);
+								sprite.changeY(-1);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
+								sprite.changeX(-1);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
+								sprite.changeX(1);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
+								sprite.changeY(1);
 							}
 	//						System.out.println("The user pressed the following key: " + pos.x);
 						}
+						for (Actor actor : actors) {
+							actor.calcMove(0, 0, screenWidth, screenHeight);
+							actor.performMove( );
+							actor.draw(window);
+						}
+						window.display( );
 					}
+					
+					//code for mouse
+					/*Vector2i pos = Mouse.getPosition();		
+					sprite.calMove(pos.x,pos.y);*/
 				}
 				
 			}
@@ -303,17 +365,17 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image logo = new Image(512,150,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Logo.jpg");
+			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
 			
-			Image startButton = new Image(512, 388,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
-			Image optionsButton = new Image(512, 518,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
-			Image leaderboardButton = new Image(512, 648,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/StartButton.jpg");
+			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
+			Image optionsButton = new Image(512, 518,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
+			Image leaderboardButton = new Image(512, 648,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
 			
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/downloads/Test/Background.jpg"));
+			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
 			actors.add(startButton);
 			actors.add(optionsButton);
 			actors.add(leaderboardButton);
-			actors.add(logo);
+			//actors.add(logo);
 		
 			while (window.isOpen( )) {
 				// Clear the screen
