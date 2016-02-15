@@ -192,7 +192,7 @@ class Test {
 			}else{
 				checkX = -1;
 			}
-			if(countX < 15){
+			if(countX < 10){
 				countX++;
 			}
 			this.x = (x * countX) + this.x;			
@@ -210,11 +210,29 @@ class Test {
 			}else{
 				checkY = -1;
 			}
-			if(countY < 15){
+			if(countY < 10){
 				countY++;
 			}
 			this.y = (y * countY) + this.y;		
 		}
+		
+		public void changeDy(int y){
+			this.dy = y;	
+		}
+		
+		public void changeDx(int x){
+			this.dx = x;
+		}
+		
+		public void reboundX(int x){
+			this.x += x;
+		}
+		
+		public void reboundY(int y){
+			this.y += y;
+		}
+
+		
 		
 		//code for mouse
 		/*public void calMove(int mouseX,int mouseY){
@@ -247,7 +265,7 @@ class Test {
 			CircleShape circle = new CircleShape(radius);
 			circle.setFillColor(new Color(c, transparency));
 			circle.setOrigin(radius, radius);
-
+			
 			this.x = x;
 			this.y = y;
 			this.dx = dx;
@@ -279,7 +297,7 @@ class Test {
 		}
 	}
 	
-	public class Game{
+	public class GameOver{
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -287,7 +305,53 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
+			
+			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
+			
+			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
+			
+			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
+			actors.add(startButton);
+			//actors.add(logo);
+		
+			while (window.isOpen( )) {
+				window.clear(Color.WHITE);
 
+				for (Actor actor : actors) {
+					actor.calcMove(0, 0, screenWidth, screenHeight);
+					actor.performMove( );
+					actor.draw(window);
+				}
+				window.display( );
+
+				
+				for (Event event : window.pollEvents( )) {
+					if (event.type == Event.Type.CLOSED) {
+						// the user pressed the close button
+						window.close( );
+					}
+					if (event.type == Event.Type.MOUSE_BUTTON_PRESSED){
+						Vector2i pos = Mouse.getPosition();
+//						System.out.println("The user pressed the following key: " + pos.y);
+						if (pos.x > 750 && pos.x < 1200 && pos.y > 520 && pos.y < 630) {
+							window.close();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	public class Game{
+		public void run(){
+			RenderWindow window = new RenderWindow( );
+			window.create(new VideoMode(screenWidth, screenHeight),
+				Title,
+				WindowStyle.DEFAULT);
+
+			window.setFramerateLimit(30);;
+			
 			Image sprite = new Image(545, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.jpg");
 			Image BackG = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
 			Image borderL = new Image(128, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
@@ -301,7 +365,9 @@ class Test {
 			Image blockMidR1S = new Image(712, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
 			Image blockMidR1L = new Image(411, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
 			
-			while (window.isOpen()) {
+			GameOver game = new GameOver();
+		
+			while (window.isOpen( )) {
 				// Clear the screen
 				window.clear();
 				actors.add(BackG);
@@ -316,15 +382,13 @@ class Test {
 				actors.add(blockMidL1L);
 				actors.add(blockMidR1S);
 				actors.add(blockMidR1L);
-				
+
 				// Move all the actors around
 				for (Actor actor : actors) {
 					actor.calcMove(0, 0, screenWidth, screenHeight);
 					actor.performMove( );
 					actor.draw(window);
-					
 				}
-
 
 				// Update the display with any changes
 				window.display( );
@@ -340,22 +404,56 @@ class Test {
 						if (event.type == Event.Type.KEY_PRESSED){
 							KeyEvent keyboard = event.asKeyEvent();
 							System.out.println(keyboard.key);
-							if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
-								sprite.changeY(-1);
+							if((keyboard.key.equals(Keyboard.Key.valueOf("A")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDx(-5);
+								sprite.changeDy(-5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("D")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDy(-5);
+								sprite.changeDx(5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("D")) == true)){
+								sprite.changeDy(5);
+								sprite.changeDx(5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("A")) == true)){
+								sprite.changeDy(5);
+								sprite.changeDx(-5);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
+								sprite.changeDy(-5);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
-								sprite.changeX(-1);
+								sprite.changeDx(-5);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
-								sprite.changeX(1);
+								sprite.changeDx(5);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
-								sprite.changeY(1);
+								sprite.changeDy(5);
 							}
 	//						System.out.println("The user pressed the following key: " + pos.x);
 						}
+						
+						if (event.type == Event.Type.KEY_RELEASED){
+							sprite.changeDx(0);
+							sprite.changeDy(0);
+						}
+						
+						
 						for (Actor actor : actors) {
 							actor.calcMove(0, 0, screenWidth, screenHeight);
 							actor.performMove( );
 							actor.draw(window);
 						}
+						
+						if(sprite.x < 260){
+							sprite.reboundX(10);
+						}else if(sprite.x > 765){
+							sprite.reboundX(-10);
+						}
+						
+						if(sprite.y < 0){
+							sprite.reboundY(10);
+						}else if(sprite.y > 765){
+							window.close();
+							game.run();
+						}
+							
+						
 						window.display( );
 					}
 					
@@ -366,6 +464,9 @@ class Test {
 				
 			}
 		}
+		
+		
+		
 	}
 
 	public class StartMenu{
@@ -388,8 +489,8 @@ class Test {
 			Image optionsButton = new Image(512, 518,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
 			Image leaderboardButton = new Image(512, 648,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
 			Image Background = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
-			
-	
+						
+		
 			while (window.isOpen( )) {
 				// Clear the screen
 				window.clear(Color.WHITE);
@@ -398,6 +499,7 @@ class Test {
 				actors.add(optionsButton);
 				actors.add(leaderboardButton);
 				actors.add(logo);
+
 
 				// Move all the actors around
 				for (Actor actor : actors) {
