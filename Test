@@ -287,26 +287,44 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
-			Image sprite = new Image(545, 384,0,0,0, "H:/My Documents/210/Test/Sprite.jpg");
-			
-			
-			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
-			actors.add(sprite);
-			actors.add(new Image(128, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg"));
-			actors.add(new Image(896, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg"));
-			
-			
-		
-			while (window.isOpen( )) {
-				// Clear the screen
-				window.clear(Color.WHITE);
 
+			Image sprite = new Image(545, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.jpg");
+			Image BackG = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+			Image borderL = new Image(128, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			Image borderR = new Image(896, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			Image blockL = new Image(477, 75,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			Image blockR = new Image(547, 175,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			Image blockMid11 = new Image(367, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			Image blockMid12 = new Image(658, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			Image blockMidL1S = new Image(291, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			Image blockMidL1L = new Image(597, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
+			Image blockMidR1S = new Image(712, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			Image blockMidR1L = new Image(411, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
+			
+			while (window.isOpen()) {
+				// Clear the screen
+				window.clear();
+				actors.add(BackG);
+				actors.add(sprite);
+				actors.add(borderL);
+				actors.add(borderR);
+				actors.add(blockL);
+				actors.add(blockR);
+				actors.add(blockMid11);
+				actors.add(blockMid12);
+				actors.add(blockMidL1S);
+				actors.add(blockMidL1L);
+				actors.add(blockMidR1S);
+				actors.add(blockMidR1L);
+				
 				// Move all the actors around
 				for (Actor actor : actors) {
 					actor.calcMove(0, 0, screenWidth, screenHeight);
 					actor.performMove( );
 					actor.draw(window);
+					
 				}
+
 
 				// Update the display with any changes
 				window.display( );
@@ -365,21 +383,21 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
+			Image logo = new Image(512,150,0,0,0, "C:/Users/Matthew/Downloads/Test/Logo.png");			
+			Image startButton = new Image(512, 388,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
+			Image optionsButton = new Image(512, 518,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
+			Image leaderboardButton = new Image(512, 648,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
+			Image Background = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
 			
-			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
-			Image optionsButton = new Image(512, 518,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
-			Image leaderboardButton = new Image(512, 648,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
-			
-			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
-			actors.add(startButton);
-			actors.add(optionsButton);
-			actors.add(leaderboardButton);
-			//actors.add(logo);
-		
+	
 			while (window.isOpen( )) {
 				// Clear the screen
 				window.clear(Color.WHITE);
+				actors.add(Background);
+				actors.add(startButton);
+				actors.add(optionsButton);
+				actors.add(leaderboardButton);
+				actors.add(logo);
 
 				// Move all the actors around
 				for (Actor actor : actors) {
