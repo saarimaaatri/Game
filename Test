@@ -181,39 +181,11 @@ class Test {
 		}
 
 		public void changeX(int x){
-			if(x > 0 && checkX == -1){
-				countX = 0;
-			}else if(x < 0 && checkX == 1){
-				countX = 0;
-			}
-			
-			if(x > 0){
-				checkX = 1;
-			}else{
-				checkX = -1;
-			}
-			if(countX < 10){
-				countX++;
-			}
-			this.x = (x * countX) + this.x;			
+			this.x = x;
 		}
 		
 		public void changeY(int y){
-			if(y > 0 && checkY == -1){
-				countY = 0;
-			}else if(y < 0 && checkY == 1){
-				countY = 0;
-			}
-			
-			if(y > 0){
-				checkY = 1;
-			}else{
-				checkY = -1;
-			}
-			if(countY < 10){
-				countY++;
-			}
-			this.y = (y * countY) + this.y;		
+			this.y = y;
 		}
 		
 		public void changeDy(int y){
@@ -350,20 +322,22 @@ class Test {
 				Title,
 				WindowStyle.DEFAULT);
 
-			window.setFramerateLimit(30);;
+			window.setFramerateLimit(30);
 			
-			Image sprite = new Image(545, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.jpg");
-			Image BackG = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
-			Image borderL = new Image(128, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
-			Image borderR = new Image(896, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
-			Image blockL = new Image(477, 75,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
-			Image blockR = new Image(547, 175,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
-			Image blockMid11 = new Image(367, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
-			Image blockMid12 = new Image(658, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
-			Image blockMidL1S = new Image(291, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
-			Image blockMidL1L = new Image(597, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
-			Image blockMidR1S = new Image(712, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
-			Image blockMidR1L = new Image(411, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
+			Image[ ] things = new Image[8];
+			
+			Image sprite = new Image(545, 384,0,0,0, "H:/My Documents/210/Test/Sprite.jpg");
+			Image BackG = new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg");
+			Image borderL = new Image(128, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg");
+			Image borderR = new Image(896, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg");
+			things[0] = new Image(477, 75,0,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
+			things[1] = new Image(547, 175,0,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
+			things[2] = new Image(367, 275,0,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
+			things[3] = new Image(658, 275,0,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
+			things[4] = new Image(291, 375,0,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
+			things[5] = new Image(597, 375,0,0,1, "H:/My Documents/210/Test/BlockLArge.jpg");
+			things[6] = new Image(712, 475,0,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
+			things[7] = new Image(411, 475,0,0,1, "H:/My Documents/210/Test/BlockLArge.jpg");
 			
 			GameOver game = new GameOver();
 		
@@ -374,27 +348,31 @@ class Test {
 				actors.add(sprite);
 				actors.add(borderL);
 				actors.add(borderR);
-				actors.add(blockL);
-				actors.add(blockR);
-				actors.add(blockMid11);
-				actors.add(blockMid12);
-				actors.add(blockMidL1S);
-				actors.add(blockMidL1L);
-				actors.add(blockMidR1S);
-				actors.add(blockMidR1L);
-
-				// Move all the actors around
-				for (Actor actor : actors) {
-					actor.calcMove(0, 0, screenWidth, screenHeight);
-					actor.performMove( );
-					actor.draw(window);
-				}
-
-				// Update the display with any changes
-				window.display( );
 				
+				for(int i = 0; i < 8; i++){
+					actors.add(things[i]);
+				}
+				
+
 				// Handle any event
 				while(true){
+					for (Actor actor : actors) {
+						actor.calcMove(0, 0, screenWidth, screenHeight);
+						actor.performMove( );
+						actor.draw(window);
+					}
+					
+					for(int i = 0; i < 8; i++){
+							if(things[i].y > 762){
+								actors.remove(things[i]);
+								things[i].changeY(0);
+								actors.add(things[i]);
+							}
+					}
+				
+
+					// Update the display with any changes
+					window.display( );
 					//keyboard working code
 					for (Event event : window.pollEvents( )) {
 						if (event.type == Event.Type.CLOSED) {
@@ -425,7 +403,7 @@ class Test {
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
 								sprite.changeDy(5);
 							}
-	//						System.out.println("The user pressed the following key: " + pos.x);
+							System.out.println("The user pressed the following key: " + things[7].y);
 						}
 						
 						if (event.type == Event.Type.KEY_RELEASED){
@@ -448,7 +426,7 @@ class Test {
 						
 						if(sprite.y < 0){
 							sprite.reboundY(10);
-						}else if(sprite.y > 765){
+						}else if(sprite.y > 700){
 							window.close();
 							game.run();
 						}
@@ -456,6 +434,7 @@ class Test {
 						
 						window.display( );
 					}
+
 					
 					//code for mouse
 					/*Vector2i pos = Mouse.getPosition();		
@@ -484,11 +463,11 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image logo = new Image(512,150,0,0,0, "C:/Users/Matthew/Downloads/Test/Logo.png");			
-			Image startButton = new Image(512, 388,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
-			Image optionsButton = new Image(512, 518,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
-			Image leaderboardButton = new Image(512, 648,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
-			Image Background = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+			Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.png");			
+			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.png");
+			Image optionsButton = new Image(512, 518,0,0,0, "H:/My Documents/210/Test/OptionsButton.png");
+			Image leaderboardButton = new Image(512, 648,0,0,0, "H:/My Documents/210/Test/LeaderboardButton.png");
+			Image Background = new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg");
 						
 		
 			while (window.isOpen( )) {
