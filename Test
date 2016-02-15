@@ -145,7 +145,16 @@ class Test {
 		}
 	}
 
-	private class Image extends Actor {
+	private class Image extends Actor{
+		int countX = 0;
+		int countY = 0;
+		
+		int checkY = 1;
+		int checkX = 1;
+		
+		int neX = 0;
+		int neY = 0;
+		
 		public Image(int x, int y, int r,int dx,int dy,String textureFile) {
 			//
 			// Load image/ texture
@@ -170,17 +179,93 @@ class Test {
 
 			obj = img;
 		}
-	}
 
+		public void changeX(int x){
+			if(x > 0 && checkX == -1){
+				countX = 0;
+			}else if(x < 0 && checkX == 1){
+				countX = 0;
+			}
+			
+			if(x > 0){
+				checkX = 1;
+			}else{
+				checkX = -1;
+			}
+			if(countX < 10){
+				countX++;
+			}
+			this.x = (x * countX) + this.x;			
+		}
+		
+		public void changeY(int y){
+			if(y > 0 && checkY == -1){
+				countY = 0;
+			}else if(y < 0 && checkY == 1){
+				countY = 0;
+			}
+			
+			if(y > 0){
+				checkY = 1;
+			}else{
+				checkY = -1;
+			}
+			if(countY < 10){
+				countY++;
+			}
+			this.y = (y * countY) + this.y;		
+		}
+		
+		public void changeDy(int y){
+			this.dy = y;	
+		}
+		
+		public void changeDx(int x){
+			this.dx = x;
+		}
+		
+		public void reboundX(int x){
+			this.x += x;
+		}
+		
+		public void reboundY(int y){
+			this.y += y;
+		}
+
+		
+		
+		//code for mouse
+		/*public void calMove(int mouseX,int mouseY){
+			neX = mouseX - this.x;
+			neY = mouseY - this.y;
+			
+		
+			if(neX > 0){
+				this.changeX(1);
+			}
+			if(neX < 0){
+				this.changeX(-1);
+			}
+			if(neY > 0){
+				this.changeY(1);
+			}
+			if(neY < 0){
+				this.changeY(-1);
+			}
+			
+			
+		}*/
+	}
+	
 	private class Bubble extends Actor {
 		private int radius;
 
 		public Bubble(int x, int y, int dx, int dy, int radius, Color c,
-				int transparency) {
+			int transparency) {
 			CircleShape circle = new CircleShape(radius);
 			circle.setFillColor(new Color(c, transparency));
 			circle.setOrigin(radius, radius);
-
+			
 			this.x = x;
 			this.y = y;
 			this.dx = dx;
@@ -212,16 +297,7 @@ class Test {
 		}
 	}
 	
-	public class Game{
-		int gameWidth;
-		int gameHieght;
-		
-		public Game(int gameWidth,int gameHieght){
-			// a bit pointless
-			this.gameWidth = gameWidth;
-			this.gameHieght = gameHieght;
-		}
-		
+	public class GameOver{
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -229,14 +305,83 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
+			
+			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
+			
+			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
+			
+			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
+			actors.add(startButton);
+			//actors.add(logo);
 		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Background.jpg"));
-			actors.add(new Image(128, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Border.jpg"));
-			actors.add(new Image(896, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Border.jpg"));
+			while (window.isOpen( )) {
+				window.clear(Color.WHITE);
+
+				for (Actor actor : actors) {
+					actor.calcMove(0, 0, screenWidth, screenHeight);
+					actor.performMove( );
+					actor.draw(window);
+				}
+				window.display( );
+
+				
+				for (Event event : window.pollEvents( )) {
+					if (event.type == Event.Type.CLOSED) {
+						// the user pressed the close button
+						window.close( );
+					}
+					if (event.type == Event.Type.MOUSE_BUTTON_PRESSED){
+						Vector2i pos = Mouse.getPosition();
+//						System.out.println("The user pressed the following key: " + pos.y);
+						if (pos.x > 750 && pos.x < 1200 && pos.y > 520 && pos.y < 630) {
+							window.close();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	public class Game{
+		public void run(){
+			RenderWindow window = new RenderWindow( );
+			window.create(new VideoMode(screenWidth, screenHeight),
+				Title,
+				WindowStyle.DEFAULT);
+
+			window.setFramerateLimit(30);;
+			
+			Image sprite = new Image(545, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.jpg");
+			Image BackG = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+			Image borderL = new Image(128, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			Image borderR = new Image(896, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			Image blockL = new Image(477, 75,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			Image blockR = new Image(547, 175,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			Image blockMid11 = new Image(367, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			Image blockMid12 = new Image(658, 275,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			Image blockMidL1S = new Image(291, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			Image blockMidL1L = new Image(597, 375,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
+			Image blockMidR1S = new Image(712, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			Image blockMidR1L = new Image(411, 475,0,0,0, "C:/Users/Matthew/Downloads/Test/BlockLArge.jpg");
+			
+			GameOver game = new GameOver();
 		
 			while (window.isOpen( )) {
 				// Clear the screen
-				window.clear(Color.WHITE);
+				window.clear();
+				actors.add(BackG);
+				actors.add(sprite);
+				actors.add(borderL);
+				actors.add(borderR);
+				actors.add(blockL);
+				actors.add(blockR);
+				actors.add(blockMid11);
+				actors.add(blockMid12);
+				actors.add(blockMidL1S);
+				actors.add(blockMidL1L);
+				actors.add(blockMidR1S);
+				actors.add(blockMidR1L);
 
 				// Move all the actors around
 				for (Actor actor : actors) {
@@ -247,16 +392,81 @@ class Test {
 
 				// Update the display with any changes
 				window.display( );
-
-				// Handle any events
-				for (Event event : window.pollEvents( )) {
-					if (event.type == Event.Type.CLOSED) {
-						// the user pressed the close button
-						window.close( );
+				
+				// Handle any event
+				while(true){
+					//keyboard working code
+					for (Event event : window.pollEvents( )) {
+						if (event.type == Event.Type.CLOSED) {
+							// the user pressed the close button
+							window.close( );
+						}
+						if (event.type == Event.Type.KEY_PRESSED){
+							KeyEvent keyboard = event.asKeyEvent();
+							System.out.println(keyboard.key);
+							if((keyboard.key.equals(Keyboard.Key.valueOf("A")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDx(-5);
+								sprite.changeDy(-5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("D")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDy(-5);
+								sprite.changeDx(5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("D")) == true)){
+								sprite.changeDy(5);
+								sprite.changeDx(5);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("A")) == true)){
+								sprite.changeDy(5);
+								sprite.changeDx(-5);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
+								sprite.changeDy(-5);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
+								sprite.changeDx(-5);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
+								sprite.changeDx(5);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
+								sprite.changeDy(5);
+							}
+	//						System.out.println("The user pressed the following key: " + pos.x);
+						}
+						
+						if (event.type == Event.Type.KEY_RELEASED){
+							sprite.changeDx(0);
+							sprite.changeDy(0);
+						}
+						
+						
+						for (Actor actor : actors) {
+							actor.calcMove(0, 0, screenWidth, screenHeight);
+							actor.performMove( );
+							actor.draw(window);
+						}
+						
+						if(sprite.x < 260){
+							sprite.reboundX(10);
+						}else if(sprite.x > 765){
+							sprite.reboundX(-10);
+						}
+						
+						if(sprite.y < 0){
+							sprite.reboundY(10);
+						}else if(sprite.y > 765){
+							window.close();
+							game.run();
+						}
+							
+						
+						window.display( );
 					}
+					
+					//code for mouse
+					/*Vector2i pos = Mouse.getPosition();		
+					sprite.calMove(pos.x,pos.y);*/
 				}
+				
 			}
 		}
+		
+		
+		
 	}
 
 	public class StartMenu{
@@ -264,6 +474,8 @@ class Test {
 			
 		}
 		
+		Game gameBoard = new Game();
+		
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -271,14 +483,23 @@ class Test {
 				WindowStyle.DEFAULT);
 
 			window.setFramerateLimit(30);
-		
-			actors.add(new Image(512, 384,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/Background.jpg"));
-			actors.add(new Image(512, 158,0,0,0, "//lancs/homes/34/foxm1/Downloads/Test/StartButton.jpg"));
-		
+			
+			Image logo = new Image(512,150,0,0,0, "C:/Users/Matthew/Downloads/Test/Logo.png");			
+			Image startButton = new Image(512, 388,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
+			Image optionsButton = new Image(512, 518,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
+			Image leaderboardButton = new Image(512, 648,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
+			Image Background = new Image(512, 384,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+						
 		
 			while (window.isOpen( )) {
 				// Clear the screen
 				window.clear(Color.WHITE);
+				actors.add(Background);
+				actors.add(startButton);
+				actors.add(optionsButton);
+				actors.add(leaderboardButton);
+				actors.add(logo);
+
 
 				// Move all the actors around
 				for (Actor actor : actors) {
@@ -296,77 +517,29 @@ class Test {
 						// the user pressed the close button
 						window.close( );
 					}
+					if (event.type == Event.Type.MOUSE_BUTTON_PRESSED){
+						Vector2i pos = Mouse.getPosition();
+//						System.out.println("The user pressed the following key: " + pos.y);
+						if (pos.x > 750 && pos.x < 1200 && pos.y > 520 && pos.y < 630) {
+							window.close();
+							gameBoard.run();
+						}
+					}
 				}
 			}
 		}
 	}
 	
 	public void run ( ) {
-
-		//
-		// Check whether we're running from a JDK or JRE install
-		// ...and set FontPath appropriately.
-		//
 		if ((new File(JreFontPath)).exists( )) FontPath = JreFontPath;
 		else FontPath = JdkFontPath;
 		
 		StartMenu test = new StartMenu();
 		test.run();
-
-		//
-		// Create a window
-		//
-		/*
-		RenderWindow window = new RenderWindow( );
-		window.create(new VideoMode(screenWidth, screenHeight),
-				Title,
-				WindowStyle.DEFAULT);
-
-		window.setFramerateLimit(30); // Avoid excessive updates
-
-		//
-		// Create some actors
-		//
-		actors.add(new Image(300, 300,0,0,
-					0, "//lancs/homes/32/dugganj/My Documents/210/Test/yo.jpg"));
-		actors.add(new Message(screenWidth / 2, screenHeight / 2,
-					10, Message, Color.BLACK));
-		actors.add(new Bubble(500, 500, 20, Color.MAGENTA, 128));
-		actors.add(new Bubble(600, 600, 20, Color.YELLOW,  128));
-		actors.add(new Bubble(500, 600, 20, Color.BLUE,    128));
-		actors.add(new Bubble(600, 500, 20, Color.BLACK,   128));
-
-		//
-		// Main loop
-		//
-		while (window.isOpen( )) {
-			// Clear the screen
-			window.clear(Color.WHITE);
-
-			// Move all the actors around
-			for (Actor actor : actors) {
-				actor.calcMove(0, 0, screenWidth, screenHeight);
-				actor.performMove( );
-				actor.draw(window);
-			}
-
-			// Update the display with any changes
-			window.display( );
-
-			// Handle any events
-			for (Event event : window.pollEvents( )) {
-				if (event.type == Event.Type.CLOSED) {
-					// the user pressed the close button
-					window.close( );
-				}
-			}
-		}
-		
-		*/
 	}
 
 	public static void main (String args[ ]) {
 		Test t = new Test( );
 		t.run( );
 	}
-}	
+}
