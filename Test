@@ -282,9 +282,9 @@ class Test {
 			
 			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
 			
-			Image startButton = new Image(512, 388,0,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
+			Image startButton = new Image(512, 388,0,0,0,0, "H:/My Documents/210/Test/StartButton.png");
 			
-			actors.add(new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg"));
+			actors.add(new Image(512, 384,0,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
 			actors.add(startButton);
 			//actors.add(logo);
 		
@@ -318,6 +318,7 @@ class Test {
 
 	
 	public class Game{
+		private int calc;
 		public void run(){
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
@@ -328,20 +329,20 @@ class Test {
 			
 			Image[ ] things = new Image[10];
 			
-			Image sprite = new Image(512, 675,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.png");
-			Image BackG = new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
-			Image borderL = new Image(128, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
-			Image borderR = new Image(896, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
-			things[0] = new Image(477, 25,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
-			things[1] = new Image(547, 125,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
-			things[2] = new Image(477, 225,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
-			things[3] = new Image(367, 625,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
-			things[4] = new Image(658, 625,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
-			things[5] = new Image(291, 325,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
-			things[6] = new Image(597, 325,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLarge.jpg");
-			things[7] = new Image(547, 525,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");	
-			things[8] = new Image(712, 425,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
-			things[9] = new Image(411, 425,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLarge.jpg");
+			Image sprite = new Image(512, 675,0,0,0,0, "H:/My Documents/210/Test/Sprite.png");
+			Image BackG = new Image(512, 384,0,0,0,0, "H:/My Documents/210/Test/Background.jpg");
+			Image borderL = new Image(128, 384,0,0,0,0, "H:/My Documents/210/Test/Border.jpg");
+			Image borderR = new Image(896, 384,0,0,0,0, "H:/My Documents/210/Test/Border.jpg");
+			things[0] = new Image(477, 25,0,221,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
+			things[1] = new Image(547, 125,0,221,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
+			things[2] = new Image(477, 225,0,221,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
+			things[3] = new Image(367, 625,0,110,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
+			things[4] = new Image(658, 625,0,110,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
+			things[5] = new Image(291, 325,0,60,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
+			things[6] = new Image(597, 325,0,173,0,1, "H:/My Documents/210/Test/BlockLarge.jpg");
+			things[7] = new Image(547, 525,0,221,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");	
+			things[8] = new Image(712, 425,0,60,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
+			things[9] = new Image(411, 425,0,173,0,1, "H:/My Documents/210/Test/BlockLarge.jpg");
 			
 			GameOver game = new GameOver();
 		
@@ -367,6 +368,25 @@ class Test {
 							things[i].changeY(0);
 							actors.add(things[i]);
 						}
+								if((sprite.y > (things[i].y - 30) && sprite.y < (things[i].y + 30)) && ((sprite.x > (things[i].x - things[i].size)) && (sprite.x < (things[i].x + things[i].size)))){
+									if(((sprite.x > (things[i].x - things[i].size)) && (sprite.x < (things[i].x + things[i].size)))){
+										calc = sprite.x - things[i].x;
+										//right
+										if(calc > 0){
+											sprite.changeX(sprite.x + 1);
+										}else{
+											sprite.changeX(sprite.x + -1);
+										}
+									}
+									if((sprite.y > (things[i].y - 30) && sprite.y < (things[i].y + 30))){
+										calc = sprite.y - things[i].y;
+										if(calc > 0){
+											sprite.changeY(things[i].y + 30);
+										}else{
+											sprite.changeY(things[i].y - 30);
+										}
+									}
+								}	
 					}				
 					
 					for (Actor actor : actors) {
@@ -393,8 +413,24 @@ class Test {
 									actors.add(things[i]);
 								}
 								if((sprite.y > (things[i].y - 30) && sprite.y < (things[i].y + 30)) && ((sprite.x > (things[i].x - things[i].size)) && (sprite.x < (things[i].x + things[i].size)))){
-									sprite.changeY(0);
-								}								
+									if(((sprite.x > (things[i].x - things[i].size)) && (sprite.x < (things[i].x + things[i].size)))){
+										calc = sprite.x - things[i].x;
+										//right
+										if(calc > 0){
+											sprite.changeX(sprite.x + 1);
+										}else{
+											sprite.changeX(sprite.x + -1);
+										}
+									}
+									if((sprite.y > (things[i].y - 30) && sprite.y < (things[i].y + 30))){
+										calc = sprite.y - things[i].y;
+										if(calc > 0){
+											sprite.changeY(things[i].y + 30);
+										}else{
+											sprite.changeY(things[i].y - 30);
+										}
+									}
+								}									
 							}
 							
 
@@ -485,11 +521,11 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image logo = new Image(512,150,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Logo.png");			
-			Image startButton = new Image(512, 388,0,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
-			Image optionsButton = new Image(512, 518,0,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
-			Image leaderboardButton = new Image(512, 648,0,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
-			Image Background = new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+			Image logo = new Image(512,150,0,0,0,0, "H:/My Documents/210/Test/Logo.png");			
+			Image startButton = new Image(512, 388,0,0,0,0, "H:/My Documents/210/Test/StartButton.png");
+			Image optionsButton = new Image(512, 518,0,0,0,0, "H:/My Documents/210/Test/OptionsButton.png");
+			Image leaderboardButton = new Image(512, 648,0,0,0,0, "H:/My Documents/210/Test/LeaderboardButton.png");
+			Image Background = new Image(512, 384,0,0,0,0, "H:/My Documents/210/Test/Background.jpg");
 						
 		
 			while (window.isOpen( )) {
