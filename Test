@@ -36,7 +36,7 @@ class Test {
 	private static String FontFile  = "LucidaSansRegular.ttf";
 	private static String ImageFile = "team.jpg";
 
-	private static String Title   = "Hello SCC210!";
+	private static String Title   = "FreeFall";
 	private static String Message = "Round and round...";
 
 	private String FontPath;	// Where fonts were found
@@ -154,8 +154,9 @@ class Test {
 		
 		int neX = 0;
 		int neY = 0;
+		int size = 0;
 		
-		public Image(int x, int y, int r,int dx,int dy,String textureFile) {
+		public Image(int x, int y, int r,int size,int dx,int dy,String textureFile) {
 			//
 			// Load image/ texture
 			//
@@ -174,6 +175,7 @@ class Test {
 			this.x = x;
 			this.y = y;
 			this.r = r;
+			this.size = size;
 			this.dx = dx;
 			this.dy = dy;
 
@@ -280,9 +282,9 @@ class Test {
 			
 			//Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.jpg");
 			
-			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.jpg");
+			Image startButton = new Image(512, 388,0,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
 			
-			actors.add(new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
+			actors.add(new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg"));
 			actors.add(startButton);
 			//actors.add(logo);
 		
@@ -324,20 +326,22 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image[ ] things = new Image[8];
+			Image[ ] things = new Image[10];
 			
-			Image sprite = new Image(545, 384,0,0,0, "H:/My Documents/210/Test/Sprite.jpg");
-			Image BackG = new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg");
-			Image borderL = new Image(128, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg");
-			Image borderR = new Image(896, 384,0,0,0, "H:/My Documents/210/Test/Border.jpg");
-			things[0] = new Image(477, 75,0,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
-			things[1] = new Image(547, 175,0,0,1, "H:/My Documents/210/Test/BlockLnR.jpg");
-			things[2] = new Image(367, 275,0,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
-			things[3] = new Image(658, 275,0,0,1, "H:/My Documents/210/Test/BlockMid.jpg");
-			things[4] = new Image(291, 375,0,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
-			things[5] = new Image(597, 375,0,0,1, "H:/My Documents/210/Test/BlockLArge.jpg");
-			things[6] = new Image(712, 475,0,0,1, "H:/My Documents/210/Test/BlockSmall.jpg");
-			things[7] = new Image(411, 475,0,0,1, "H:/My Documents/210/Test/BlockLArge.jpg");
+			Image sprite = new Image(512, 675,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Sprite.png");
+			Image BackG = new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
+			Image borderL = new Image(128, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			Image borderR = new Image(896, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Border.jpg");
+			things[0] = new Image(477, 25,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			things[1] = new Image(547, 125,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			things[2] = new Image(477, 225,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");
+			things[3] = new Image(367, 625,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			things[4] = new Image(658, 625,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockMid.jpg");
+			things[5] = new Image(291, 325,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			things[6] = new Image(597, 325,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLarge.jpg");
+			things[7] = new Image(547, 525,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLnR.jpg");	
+			things[8] = new Image(712, 425,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockSmall.jpg");
+			things[9] = new Image(411, 425,0,70,0,1, "C:/Users/Matthew/Downloads/Test/BlockLarge.jpg");
 			
 			GameOver game = new GameOver();
 		
@@ -349,26 +353,28 @@ class Test {
 				actors.add(borderL);
 				actors.add(borderR);
 				
-				for(int i = 0; i < 8; i++){
+				for(int i = 0; i < 10; i++){
 					actors.add(things[i]);
-				}
+				}			
 				
 
 				// Handle any event
 				while(true){
+					
+					for(int i = 0; i < 10; i++){
+						if(things[i].y > 762){
+							actors.remove(things[i]);
+							things[i].changeY(0);
+							actors.add(things[i]);
+						}
+					}				
+					
 					for (Actor actor : actors) {
 						actor.calcMove(0, 0, screenWidth, screenHeight);
 						actor.performMove( );
 						actor.draw(window);
 					}
 					
-					for(int i = 0; i < 8; i++){
-							if(things[i].y > 762){
-								actors.remove(things[i]);
-								things[i].changeY(0);
-								actors.add(things[i]);
-							}
-					}
 				
 
 					// Update the display with any changes
@@ -380,30 +386,42 @@ class Test {
 							window.close( );
 						}
 						if (event.type == Event.Type.KEY_PRESSED){
-							KeyEvent keyboard = event.asKeyEvent();
-							System.out.println(keyboard.key);
-							if((keyboard.key.equals(Keyboard.Key.valueOf("A")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
-								sprite.changeDx(-5);
-								sprite.changeDy(-5);
-							}else if((keyboard.key.equals(Keyboard.Key.valueOf("D")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
-								sprite.changeDy(-5);
-								sprite.changeDx(5);
-							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("D")) == true)){
-								sprite.changeDy(5);
-								sprite.changeDx(5);
-							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("A")) == true)){
-								sprite.changeDy(5);
-								sprite.changeDx(-5);
-							}else if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
-								sprite.changeDy(-5);
-							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
-								sprite.changeDx(-5);
-							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
-								sprite.changeDx(5);
-							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
-								sprite.changeDy(5);
+							for(int i = 0; i < 10; i++){
+								if(things[i].y > 762){
+									actors.remove(things[i]);
+									things[i].changeY(0);
+									actors.add(things[i]);
+								}
+								if((sprite.y > (things[i].y - 30) && sprite.y < (things[i].y + 30)) && ((sprite.x > (things[i].x - things[i].size)) && (sprite.x < (things[i].x + things[i].size)))){
+									sprite.changeY(0);
+								}								
 							}
-							System.out.println("The user pressed the following key: " + things[7].y);
+							
+
+							KeyEvent keyboard = event.asKeyEvent();
+//							System.out.println(keyboard.key);
+							if((keyboard.key.equals(Keyboard.Key.valueOf("A")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDx(-6);
+								sprite.changeDy(-6);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("D")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
+								sprite.changeDy(-6);
+								sprite.changeDx(6);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("D")) == true)){
+								sprite.changeDy(6);
+								sprite.changeDx(6);
+							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("A")) == true)){
+								sprite.changeDy(6);
+								sprite.changeDx(-6);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
+								sprite.changeDy(-6);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
+								sprite.changeDx(-6);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
+								sprite.changeDx(6);
+							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
+								sprite.changeDy(6);
+							}
+//						System.out.println("The user pressed the following key: " + things[7].y);
 						}
 						
 						if (event.type == Event.Type.KEY_RELEASED){
@@ -426,10 +444,14 @@ class Test {
 						
 						if(sprite.y < 0){
 							sprite.reboundY(10);
-						}else if(sprite.y > 700){
+						}else if(sprite.y > 763){
 							window.close();
 							game.run();
-						}
+						}//else if(!(sprite.y > 700)){
+//							for(int Score = 0;;Score++) {
+//							System.out.println("Score: " + Score); 
+//							}
+//						}
 							
 						
 						window.display( );
@@ -463,11 +485,11 @@ class Test {
 
 			window.setFramerateLimit(30);
 			
-			Image logo = new Image(512,150,0,0,0, "H:/My Documents/210/Test/Logo.png");			
-			Image startButton = new Image(512, 388,0,0,0, "H:/My Documents/210/Test/StartButton.png");
-			Image optionsButton = new Image(512, 518,0,0,0, "H:/My Documents/210/Test/OptionsButton.png");
-			Image leaderboardButton = new Image(512, 648,0,0,0, "H:/My Documents/210/Test/LeaderboardButton.png");
-			Image Background = new Image(512, 384,0,0,0, "H:/My Documents/210/Test/Background.jpg");
+			Image logo = new Image(512,150,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Logo.png");			
+			Image startButton = new Image(512, 388,0,0,0,0, "C:/Users/Matthew/Downloads/Test/StartButton.png");
+			Image optionsButton = new Image(512, 518,0,0,0,0, "C:/Users/Matthew/Downloads/Test/OptionsButton.png");
+			Image leaderboardButton = new Image(512, 648,0,0,0,0, "C:/Users/Matthew/Downloads/Test/LeaderboardButton.png");
+			Image Background = new Image(512, 384,0,0,0,0, "C:/Users/Matthew/Downloads/Test/Background.jpg");
 						
 		
 			while (window.isOpen( )) {
