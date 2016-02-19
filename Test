@@ -1,8 +1,4 @@
-//
-//	SCC210 Example code
-//
-//		Andrew Scott, 2015
-//
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -18,11 +14,6 @@ class Test {
 	private static int screenWidth  = 1024;
 	private static int screenHeight = 768;
 
-	//
-	// The Java install comes with a set of fonts but these will
-	// be on different filesystem paths depending on the version
-	// of Java and whether the JDK or JRE version is being used.
-	//
 	private static String JavaVersion = 
 		Runtime.class.getPackage( ).getImplementationVersion( );
 	private static String JdkFontPath =
@@ -210,30 +201,6 @@ class Test {
 		public void reboundY(int y){
 			this.y += y;
 		}
-
-		
-		
-		//code for mouse
-		/*public void calMove(int mouseX,int mouseY){
-			neX = mouseX - this.x;
-			neY = mouseY - this.y;
-			
-		
-			if(neX > 0){
-				this.changeX(1);
-			}
-			if(neX < 0){
-				this.changeX(-1);
-			}
-			if(neY > 0){
-				this.changeY(1);
-			}
-			if(neY < 0){
-				this.changeY(-1);
-			}
-			
-			
-		}*/
 	}
 	
 	private class Bubble extends Actor {
@@ -277,7 +244,8 @@ class Test {
 	}
 	
 	public class GameOver{
-		public void run(){
+		public void run(int score){
+			Game newGame = new Game();
 			RenderWindow window = new RenderWindow( );
 			window.create(new VideoMode(screenWidth, screenHeight),
 				Title,
@@ -290,6 +258,7 @@ class Test {
 			Image startButton = new Image(512, 388,0,0,0,0, "H:/My Documents/210/Test/StartButton.png");
 			
 			actors.add(new Image(512, 384,0,0,0,0, "H:/My Documents/210/Test/Background.jpg"));
+			actors.add(new Message(512,200,0,0,0,"you scored: " + String.valueOf(score),Color.WHITE));
 			actors.add(startButton);
 			//actors.add(logo);
 		
@@ -314,6 +283,7 @@ class Test {
 //						System.out.println("The user pressed the following key: " + pos.y);
 						if (pos.x > 750 && pos.x < 1200 && pos.y > 520 && pos.y < 630) {
 							window.close();
+							newGame.run();
 						}
 					}
 				}
@@ -336,6 +306,7 @@ class Test {
 			Image[ ] things = new Image[10];
 			
 			int speed = 1;
+			int spriteSpeed = 7;
 			
 			Image sprite = new Image(512, 675,0,0,0,0, "H:/My Documents/210/Test/Sprite.png");
 			Image BackG = new Image(512, 384,0,0,0,0, "H:/My Documents/210/Test/Background.jpg");
@@ -405,8 +376,15 @@ class Test {
 						score.changeMessage(String.valueOf(pointff));
 						
 						for(int i = 0; i < 10; i++){
-							things[i].changeDy(speed);
+							if(speed < 5){
+								things[i].changeDy(speed);
+							}
 						}
+						
+						if(speed%2 == 1 && speed < 8){
+							spriteSpeed += 2;
+						}
+						
 					}
 					
 					for (Actor actor : actors) {
@@ -426,6 +404,7 @@ class Test {
 							window.close( );
 						}
 						if (event.type == Event.Type.KEY_PRESSED){
+														
 							for(int i = 0; i < 10; i++){
 								if(things[i].y > 762){
 									actors.remove(things[i]);
@@ -453,29 +432,46 @@ class Test {
 								}									
 							}
 							
+							if(things[0].y == 0){
+								pointff += 10;
+								speed++;
+								score.changeMessage(String.valueOf(pointff));
+						
+								for(int i = 0; i < 10; i++){
+									if(speed < 5){
+										things[i].changeDy(speed);
+									}
+								}
+								
+								if(speed%2 == 0 && speed < 8){
+									spriteSpeed += 2;
+									System.out.println(spriteSpeed);
+								}
+						
+							}
 
 							KeyEvent keyboard = event.asKeyEvent();
 //							System.out.println(keyboard.key);
 							if((keyboard.key.equals(Keyboard.Key.valueOf("A")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
-								sprite.changeDx(-6);
-								sprite.changeDy(-6);
+								sprite.changeDx(-spriteSpeed);
+								sprite.changeDy(-spriteSpeed);
 							}else if((keyboard.key.equals(Keyboard.Key.valueOf("D")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("W")) == true)){
-								sprite.changeDy(-6);
-								sprite.changeDx(6);
+								sprite.changeDy(-spriteSpeed);
+								sprite.changeDx(spriteSpeed);
 							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("D")) == true)){
-								sprite.changeDy(6);
-								sprite.changeDx(6);
+								sprite.changeDy(spriteSpeed);
+								sprite.changeDx(spriteSpeed);
 							}else if((keyboard.key.equals(Keyboard.Key.valueOf("S")) == true) && (keyboard.key.equals(Keyboard.Key.valueOf("A")) == true)){
-								sprite.changeDy(6);
-								sprite.changeDx(-6);
+								sprite.changeDy(spriteSpeed);
+								sprite.changeDx(-spriteSpeed);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("W")) == true){
-								sprite.changeDy(-6);
+								sprite.changeDy(-spriteSpeed);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("A")) == true){
-								sprite.changeDx(-6);
+								sprite.changeDx(-spriteSpeed);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("D")) == true){
-								sprite.changeDx(6);
+								sprite.changeDx(spriteSpeed);
 							}else if(keyboard.key.equals(Keyboard.Key.valueOf("S")) == true){
-								sprite.changeDy(6);
+								sprite.changeDy(spriteSpeed);
 							}
 //						System.out.println("The user pressed the following key: " + things[7].y);
 						}
@@ -502,21 +498,12 @@ class Test {
 							sprite.reboundY(10);
 						}else if(sprite.y > 763){
 							window.close();
-							game.run();
-						}//else if(!(sprite.y > 700)){
-//							for(int Score = 0;;Score++) {
-//							System.out.println("Score: " + Score); 
-//							}
-//						}
+							game.run(pointff);
+						}
 							
 						
 						window.display( );
 					}
-
-					
-					//code for mouse
-					/*Vector2i pos = Mouse.getPosition();		
-					sprite.calMove(pos.x,pos.y);*/
 				}
 				
 			}
